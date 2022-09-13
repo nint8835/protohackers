@@ -3,12 +3,11 @@ package main
 import (
 	"io"
 	"log"
-	"net"
+
+	"github.com/nint8835/protohackers/pkg/server"
 )
 
-func handleConn(conn net.Conn) {
-	log.Printf("New connection: %s", conn.RemoteAddr())
-
+func handleConn(conn server.Connection) {
 	_, err := io.Copy(conn, conn)
 	if err != nil {
 		log.Printf("Error copying data: %s", err)
@@ -18,10 +17,8 @@ func handleConn(conn net.Conn) {
 }
 
 func main() {
-	listener, _ := net.Listen("tcp", ":3000")
-
-	for {
-		conn, _ := listener.Accept()
-		go handleConn(conn)
+	err := server.New(handleConn).Start()
+	if err != nil {
+		log.Fatalf("Error running server: %s", err)
 	}
 }

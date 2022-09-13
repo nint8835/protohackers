@@ -5,14 +5,13 @@ import (
 	"encoding/json"
 	"log"
 	"math/big"
-	"net"
+
+	"github.com/nint8835/protohackers/pkg/server"
 )
 
 var malformedResp = []byte("{}\n")
 
-func handleConn(conn net.Conn) {
-	log.Printf("New connection: %s", conn.RemoteAddr())
-
+func handleConn(conn server.Connection) {
 	scanner := bufio.NewScanner(conn)
 
 	for scanner.Scan() {
@@ -49,10 +48,8 @@ func handleConn(conn net.Conn) {
 }
 
 func main() {
-	listener, _ := net.Listen("tcp", ":3000")
-
-	for {
-		conn, _ := listener.Accept()
-		go handleConn(conn)
+	err := server.New(handleConn).Start()
+	if err != nil {
+		log.Fatalf("Error running server: %s", err)
 	}
 }

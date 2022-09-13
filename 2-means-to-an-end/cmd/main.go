@@ -1,16 +1,15 @@
 package main
 
 import (
-	"net"
+	"log"
 
 	meanstoanend "github.com/nint8835/protohackers/2-means-to-an-end"
+	"github.com/nint8835/protohackers/pkg/server"
 )
 
 func main() {
-	listener, _ := net.Listen("tcp", ":3000")
-
-	for {
-		conn, _ := listener.Accept()
-		go meanstoanend.HandleConn(conn)
+	err := server.New(meanstoanend.HandleConn).Start()
+	if err != nil {
+		log.Fatalf("Error running server: %s", err)
 	}
 }

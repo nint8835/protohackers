@@ -7,7 +7,8 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net"
+
+	"github.com/nint8835/protohackers/pkg/server"
 )
 
 type MessageType byte
@@ -87,9 +88,7 @@ func (conn *Connection) HandleMessage(message Message) []byte {
 	}
 }
 
-func HandleConn(conn net.Conn) {
-	log.Printf("New connection: %s", conn.RemoteAddr())
-
+func HandleConn(conn server.Connection) {
 	connection := Connection{
 		Connection: conn,
 		Prices:     []Price{},
