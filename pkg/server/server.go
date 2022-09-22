@@ -8,6 +8,8 @@ import (
 
 type Connection interface {
 	io.ReadWriteCloser
+
+	RemoteAddr() net.Addr
 }
 
 type Handler func(Connection)
