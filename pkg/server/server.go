@@ -16,10 +16,11 @@ type Handler func(Connection)
 
 type Server struct {
 	Handler Handler
+	Addr    string
 }
 
 func (s *Server) Start() error {
-	listener, err := net.Listen("tcp", ":3000")
+	listener, err := net.Listen("tcp", s.Addr)
 	if err != nil {
 		return fmt.Errorf("error listening for connections: %w", err)
 	}
@@ -35,5 +36,5 @@ func (s *Server) Start() error {
 }
 
 func New(handler Handler) *Server {
-	return &Server{handler}
+	return &Server{Handler: handler, Addr: ":3000"}
 }
